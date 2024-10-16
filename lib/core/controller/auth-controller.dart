@@ -17,8 +17,25 @@ class AuthController extends GetxController {
 
   @override
   void onInit() async {
-    super.onInit();
+    // super.onInit();
     await initAppKit();
+    // listenToEvents();
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+    // print("readyyy ");
+    // appKitModal?.onModalConnect.subscribe((ModalConnect? event){
+    //   print(event?.session.address);
+    // });
+    // listenToEvents();
+     appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
+        if (event != null) {
+          print('Wallet connected: ${event.session.address}');
+          update(); // Memperbarui UI jika koneksi berhasil
+        }
+      });
   }
 
   Future<void> initAppKit() async {
@@ -35,7 +52,12 @@ class AuthController extends GetxController {
         ),
       ),
     );
-    initializeAppKitModal(Get.context!);
+    initializeAppKitModal(Get.context!).then((_){
+      listenToEvents();
+    }).catchError((onError){
+      print(onError);
+    
+    });
   }
 
   Future<void> initializeAppKitModal(BuildContext context) async {
@@ -66,8 +88,6 @@ class AuthController extends GetxController {
       print("AppKitModal belum diinisialisasi!");
     }
     walletAddress.value = appKitModal?.session?.address!;
-    // buttonConnect.value = true;
-    // buttonSign.value = true;
   }
 
   Future<void> signMessage(String message) async {
@@ -110,6 +130,39 @@ class AuthController extends GetxController {
       }
     } else {
       print("AppKitModal belum diinisialisasi.");
+    }
+  }
+
+void listenToEvents() {
+    // Cek apakah appKitModal sudah diinisialisasi
+    if (appKitModal != null) {
+      // Dengarkan koneksi modal
+      appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
+        if (event != null) {
+          print('Wallet connected: ${event.session.address}');
+          update(); // Memperbarui UI jika koneksi berhasil
+        }
+      });
+
+      // Dengarkan disconnect
+      appKitModal!.onModalDisconnect.subscribe((ModalDisconnect? event) {
+        if (event != null) {
+          print('Wallet disconnected');
+          update(); // Memperbarui UI jika wallet disconnect
+        }
+      });
+
+      // Tambahkan event listener lainnya seperti network change, update, dan error
+      appKitModal!.onModalNetworkChange.subscribe((ModalNetworkChange? event) {
+        print('Network changed: ${event?.chainId}');
+        update(); // Perbarui jika network berubah
+      });
+
+      appKitModal!.onModalError.subscribe((ModalError? event) {
+        print('Error occurred: ${event?.message}');
+      });
+    } else {
+      print('AppKitModal belum diinisialisasi.');
     }
   }
 }

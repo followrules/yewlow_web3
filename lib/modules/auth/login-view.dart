@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 import 'package:yewlow_apps/core/controller/auth-controller.dart';
 
 class LoginView extends StatelessWidget {
@@ -78,6 +79,7 @@ class LoginView extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
+                        
                         Form(
                           // key: controller.formKey,
                           child: Column(
@@ -106,12 +108,7 @@ class LoginView extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Obx(() {
-                              if (metaMaskController.walletAddress.value !=
-                                  "") {
-                                return SizedBox();
-                              } else {
-                                return (Material(
+                            Material(
                                   color: Colors.black.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(20),
                                   child: InkWell(
@@ -151,9 +148,7 @@ class LoginView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                ));
-                              }
-                            }),
+                                ),
                             Material(
                               color: Colors.black.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(20),
