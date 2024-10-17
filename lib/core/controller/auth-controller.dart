@@ -25,17 +25,19 @@ class AuthController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    // print("readyyy ");
+    print("readyyy ");
     // appKitModal?.onModalConnect.subscribe((ModalConnect? event){
     //   print(event?.session.address);
     // });
     // listenToEvents();
-     appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
-        if (event != null) {
-          print('Wallet connected: ${event.session.address}');
-          update(); // Memperbarui UI jika koneksi berhasil
-        }
-      });
+    // var ad = appKitModal?.session?.address!;
+    // print("addressnya "+ad.toString());
+    //  appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
+    //     if (event != null) {
+    //       print('Wallet connected: ${event.session.address}');
+    //       update(); // Memperbarui UI jika koneksi berhasil
+    //     }
+    //   });
   }
 
   Future<void> initAppKit() async {
@@ -52,11 +54,10 @@ class AuthController extends GetxController {
         ),
       ),
     );
-    initializeAppKitModal(Get.context!).then((_){
-      listenToEvents();
-    }).catchError((onError){
-      print(onError);
-    
+    initializeAppKitModal(Get.context!).then((_) {
+      //   listenToEvents();
+      // }).catchError((onError){
+      // print(onError);
     });
   }
 
@@ -83,11 +84,14 @@ class AuthController extends GetxController {
   void connectWallet() {
     // Pastikan appKitModal sudah diinisialisasi
     if (appKitModal != null) {
-      appKitModal!.openModalView();
+      if (!appKitModal!.isConnected) {
+        appKitModal!.openModalView();
+      }
+
+      walletAddress.value = appKitModal?.session?.address!;
     } else {
       print("AppKitModal belum diinisialisasi!");
     }
-    walletAddress.value = appKitModal?.session?.address!;
   }
 
   Future<void> signMessage(String message) async {
@@ -133,36 +137,36 @@ class AuthController extends GetxController {
     }
   }
 
-void listenToEvents() {
-    // Cek apakah appKitModal sudah diinisialisasi
-    if (appKitModal != null) {
-      // Dengarkan koneksi modal
-      appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
-        if (event != null) {
-          print('Wallet connected: ${event.session.address}');
-          update(); // Memperbarui UI jika koneksi berhasil
-        }
-      });
+// void listenToEvents() {
+//     // Cek apakah appKitModal sudah diinisialisasi
+//     if (appKitModal != null) {
+//       // Dengarkan koneksi modal
+//       appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
+//         if (event != null) {
+//           print('Wallet connected: ${event.session.address}');
+//           update(); // Memperbarui UI jika koneksi berhasil
+//         }
+//       });
 
-      // Dengarkan disconnect
-      appKitModal!.onModalDisconnect.subscribe((ModalDisconnect? event) {
-        if (event != null) {
-          print('Wallet disconnected');
-          update(); // Memperbarui UI jika wallet disconnect
-        }
-      });
+//       // Dengarkan disconnect
+//       appKitModal!.onModalDisconnect.subscribe((ModalDisconnect? event) {
+//         if (event != null) {
+//           print('Wallet disconnected');
+//           update(); // Memperbarui UI jika wallet disconnect
+//         }
+//       });
 
-      // Tambahkan event listener lainnya seperti network change, update, dan error
-      appKitModal!.onModalNetworkChange.subscribe((ModalNetworkChange? event) {
-        print('Network changed: ${event?.chainId}');
-        update(); // Perbarui jika network berubah
-      });
+//       // Tambahkan event listener lainnya seperti network change, update, dan error
+//       appKitModal!.onModalNetworkChange.subscribe((ModalNetworkChange? event) {
+//         print('Network changed: ${event?.chainId}');
+//         update(); // Perbarui jika network berubah
+//       });
 
-      appKitModal!.onModalError.subscribe((ModalError? event) {
-        print('Error occurred: ${event?.message}');
-      });
-    } else {
-      print('AppKitModal belum diinisialisasi.');
-    }
-  }
+//       appKitModal!.onModalError.subscribe((ModalError? event) {
+//         print('Error occurred: ${event?.message}');
+//       });
+//     } else {
+//       print('AppKitModal belum diinisialisasi.');
+//     }
+//   }
 }
