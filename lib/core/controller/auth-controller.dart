@@ -6,38 +6,34 @@ import 'package:get/get.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:yewlow_apps/core/app_pages.dart';
+import 'package:yewlow_apps/store/storage_utils.dart';
 
 class AuthController extends GetxController {
   Rx<String?> walletAddress = Rx<String?>(null);
   late final ReownAppKit appKit;
   ReownAppKitModal? appKitModal; // Nullable untuk menghindari reinitialization
   Rx<String?> signatureResult = Rx<String?>(null); // Rx untuk hasil signature
-  // RxBool buttonConnect = false.obs;
-  // RxBool buttonSign = false.obs;
+  RxBool isWalletConnected = false.obs;
+  final get_storage = StorageUtils();
 
   @override
   void onInit() async {
-    // super.onInit();
-    await initAppKit();
-    // listenToEvents();
+    super.onInit();
+    initAppKit();
   }
 
   @override
   void onReady() async {
     super.onReady();
     print("readyyy ");
-    // appKitModal?.onModalConnect.subscribe((ModalConnect? event){
-    //   print(event?.session.address);
-    // });
-    // listenToEvents();
-    // var ad = appKitModal?.session?.address!;
-    // print("addressnya "+ad.toString());
-    //  appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
-    //     if (event != null) {
-    //       print('Wallet connected: ${event.session.address}');
-    //       update(); // Memperbarui UI jika koneksi berhasil
-    //     }
-    //   });
+    listenToEvents();
+    initializeAppKitModal(Get.context!);
+    var addr = await get_storage.getStroreByKey("address");
+    walletAddress.value = addr;
+
+    if (addr != null) {
+      Get.offAndToNamed(Routes.HOME);
+    }
   }
 
   Future<void> initAppKit() async {
@@ -54,11 +50,7 @@ class AuthController extends GetxController {
         ),
       ),
     );
-    initializeAppKitModal(Get.context!).then((_) {
-      //   listenToEvents();
-      // }).catchError((onError){
-      // print(onError);
-    });
+    initializeAppKitModal(Get.context!);
   }
 
   Future<void> initializeAppKitModal(BuildContext context) async {
@@ -68,8 +60,6 @@ class AuthController extends GetxController {
     final Set<String> featuredWalletIds = {
       'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
       '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust
-      // 'c03dfee351b6fcc421b4494ea33b9d4b92a984f87aa76d1663bb28705e95034a', // uni Wallet
-      // '38f5d18bd8522c244bdd70cb4a68e0e718865155811c043f052fb9f1c51de662', // uni Wallet
       '971e689d0a5be527bac79629b4ee9b925e82208e5168b733496a09c0faed0709', // uni Wallet
     };
     if (appKitModal == null) {
@@ -81,17 +71,31 @@ class AuthController extends GetxController {
     }
   }
 
-  void connectWallet() {
-    // Pastikan appKitModal sudah diinisialisasi
+  void connectWallet() async {
     if (appKitModal != null) {
       if (!appKitModal!.isConnected) {
-        appKitModal!.openModalView();
+        appKitModal!.openModalView().then((_){
+          Get.offAndToNamed(Routes.HOME);
+           get_storage.setStroreByKey(
+            "address", appKitModal?.session?.address!);
+        });
+      } else {
+        await get_storage.setStroreByKey(
+            "address", appKitModal?.session?.address!);
+        // Get.offAndToNamed(Routes.HOME);
+        // walletAddress.value = appKitModal?.session?.address!;
       }
-
-      walletAddress.value = appKitModal?.session?.address!;
     } else {
       print("AppKitModal belum diinisialisasi!");
     }
+  }
+
+  void disconnectWallet() async {
+    appKitModal!.disconnect().then((_) {
+      get_storage.deleteStroreByKey("address");
+
+      Get.offAndToNamed(Routes.LOGIN);
+    });
   }
 
   Future<void> signMessage(String message) async {
@@ -137,36 +141,25 @@ class AuthController extends GetxController {
     }
   }
 
-// void listenToEvents() {
-//     // Cek apakah appKitModal sudah diinisialisasi
-//     if (appKitModal != null) {
-//       // Dengarkan koneksi modal
-//       appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
-//         if (event != null) {
-//           print('Wallet connected: ${event.session.address}');
-//           update(); // Memperbarui UI jika koneksi berhasil
-//         }
-//       });
+  void listenToEvents() {
+    if (appKitModal != null) {
+      appKitModal!.onModalConnect.subscribe((ModalConnect? event) {
+        if (event != null) {
+          isWalletConnected.value = true;
+          walletAddress.value = event.session.address!;
+          update(); // Memperbarui UI jika koneksi berhasil
+        }
+      });
 
-//       // Dengarkan disconnect
-//       appKitModal!.onModalDisconnect.subscribe((ModalDisconnect? event) {
-//         if (event != null) {
-//           print('Wallet disconnected');
-//           update(); // Memperbarui UI jika wallet disconnect
-//         }
-//       });
+      appKitModal!.onModalDisconnect.subscribe((ModalDisconnect? event) {
+        isWalletConnected.value = false;
+        walletAddress.value = '';
+        update(); // Memperbarui UI jika wallet disconnect
+      });
 
-//       // Tambahkan event listener lainnya seperti network change, update, dan error
-//       appKitModal!.onModalNetworkChange.subscribe((ModalNetworkChange? event) {
-//         print('Network changed: ${event?.chainId}');
-//         update(); // Perbarui jika network berubah
-//       });
-
-//       appKitModal!.onModalError.subscribe((ModalError? event) {
-//         print('Error occurred: ${event?.message}');
-//       });
-//     } else {
-//       print('AppKitModal belum diinisialisasi.');
-//     }
-//   }
+      appKitModal!.onModalError.subscribe((ModalError? event) {
+        print('Error occurred: ${event?.message}');
+      });
+    }
+  }
 }

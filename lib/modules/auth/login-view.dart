@@ -79,7 +79,6 @@ class LoginView extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        
                         Form(
                           // key: controller.formKey,
                           child: Column(
@@ -109,111 +108,47 @@ class LoginView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Material(
-                                  color: Colors.lime[800]?.withOpacity(0.7),
+                              color: Colors.lime[800]?.withOpacity(0.7),
+                              borderRadius: BorderRadius.circular(20),
+                              child: InkWell(
+                                customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: InkWell(
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    splashColor: Colors.grey,
-                                    onTap: () async {
-                                      await metaMaskController
-                                          .initializeAppKitModal(context);
-                                      metaMaskController.connectWallet();
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(20),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        borderRadius: BorderRadius.circular(20),
+                                ),
+                                splashColor: Colors.grey,
+                                onTap: () async {
+                                  await metaMaskController
+                                      .initializeAppKitModal(context);
+                                  metaMaskController.connectWallet();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Flex(
+                                    direction: Axis.horizontal,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.login,
+                                        size: 24,
+                                        color: Colors.white54,
                                       ),
-                                      child: const Flex(
-                                        direction: Axis.horizontal,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Icon(
-                                            Icons.login,
-                                            size: 24,
-                                            color: Colors.white54,
-                                          ),
-                                          Text(
-                                            "Connect",
-                                            style: TextStyle(
-                                                color: Colors.white70),
-                                          ),
-                                        ],
+                                      Text(
+                                        "Connect",
+                                        style: TextStyle(color: Colors.white70),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
-                            // Material(
-                            //   color: Colors.black.withOpacity(0.3),
-                            //   borderRadius: BorderRadius.circular(20),
-                            //   child: InkWell(
-                            //     customBorder: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(20),
-                            //     ),
-                            //     splashColor: Colors.grey,
-                            //     onTap: () async {
-                            //       await metaMaskController.signMessage("hellow");
-                            //     },
-                            //     child: Container(
-                            //       padding: const EdgeInsets.all(20),
-                            //       width:
-                            //           MediaQuery.of(context).size.width * 0.4,
-                            //       decoration: BoxDecoration(
-                            //         color: Colors.transparent,
-                            //         borderRadius: BorderRadius.circular(20),
-                            //       ),
-                            //       child: const Flex(
-                            //         direction: Axis.horizontal,
-                            //         mainAxisAlignment:
-                            //             MainAxisAlignment.spaceEvenly,
-                            //         children: [
-                            //           Icon(
-                            //             Icons.login,
-                            //             size: 24,
-                            //             color: Colors.white54,
-                            //           ),
-                            //           Text(
-                            //             "Sign",
-                            //             style: TextStyle(color: Colors.white54),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
+                              ),
+                            ),
                           ],
                         ),
-                        // const Divider(),
-                        // Flex(
-                        //   direction: Axis.horizontal,
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     const SizedBox(),
-                        //     InkWell(
-                        //       // onTap: () => Get.toNamed("/register"),
-                        //       splashColor: Colors.grey,
-                        //       customBorder: BeveledRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //       ),
-                        //       child: Container(
-                        //         padding: const EdgeInsets.all(10),
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.grey.withOpacity(0.1),
-                        //           borderRadius: BorderRadius.circular(10),
-                        //         ),
-                        //         child: Text(
-                        //           "* Your key is your privacy",
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                       ],
                     ),
                   ),
