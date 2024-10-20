@@ -8,25 +8,32 @@ class HomeView extends StatelessWidget {
   const HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-
-  final AuthController metaMaskController = Get.put(AuthController());
+    final AuthController metaMaskController = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(
         key: Key("home"),
         title: Text("home pages"),
       ),
-      body: Center(
-        child: Flex(direction: Axis.vertical,children: [
-          Obx((){
-            return Text(metaMaskController.walletAddress.value ?? "");
-          }),
-          ElevatedButton(
-            onPressed: () {
-              metaMaskController.disconnectWallet();
-            },
-            child: Text("disconnect Wallet"),
-          )
-        ],),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor: Colors.blue,
+            expandedHeight: 120, // Tinggi AppBar tetap 120
+            pinned: true, // Tetap di posisi teratas saat di-scroll
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text('Static SliverAppBar'),
+              centerTitle: true,
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => ListTile(
+                title: Text('Item #$index'),
+              ),
+              childCount: 50,
+            ),
+          ),
+        ],
       ),
     );
   }
