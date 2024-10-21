@@ -38,7 +38,7 @@ class AuthController extends GetxController {
 
   Future<void> initAppKit() async {
     appKit = ReownAppKit(
-      core: ReownCore(projectId: "638d75e74290a973b28a1c01c999a1cd"),
+      core: ReownCore(projectId: "aee79d7a8fffdb4732509dca2801a653"),
       metadata: const PairingMetadata(
         name: 'Yewlow App',
         description: 'Social web3 apps',

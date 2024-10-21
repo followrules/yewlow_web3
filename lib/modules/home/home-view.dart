@@ -10,19 +10,54 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthController metaMaskController = Get.put(AuthController());
     return Scaffold(
-      appBar: AppBar(
-        key: Key("home"),
-        title: Text("home pages"),
-      ),
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor: Colors.blue,
-            expandedHeight: 120, // Tinggi AppBar tetap 120
-            pinned: true, // Tetap di posisi teratas saat di-scroll
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text('Static SliverAppBar'),
-              centerTitle: true,
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _SliverAppBarDelegate(
+              minHeight: 250.0,
+              maxHeight: 250.0,
+              appBarContent: Container(
+                color: Colors.blue,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * (0.13 / 2),
+                      left: 0,
+                      right: 0,
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            Icons.notifications_active,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                          Text("usernamexxxxx",style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: 30
+                          ),),
+                          Icon(Icons.location_on,color: Colors.white,size: 32,)
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      left: 5,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        width:86,
+                        height:86,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.lime
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
           SliverList(
@@ -36,5 +71,36 @@ class HomeView extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget appBarContent;
+
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.appBarContent,
+  });
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: appBarContent);
+  }
+
+  @override
+  bool shouldRebuild(covariant _SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        appBarContent != oldDelegate.appBarContent;
   }
 }
