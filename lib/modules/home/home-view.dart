@@ -15,10 +15,10 @@ class HomeView extends StatelessWidget {
           SliverPersistentHeader(
             pinned: true,
             delegate: _SliverAppBarDelegate(
-              minHeight: 250.0,
-              maxHeight: 250.0,
+              minHeight: 120.0,
+              maxHeight: 120.0,
               appBarContent: Container(
-                color: Colors.blue,
+                color: Colors.teal[700],
                 child: Stack(
                   children: [
                     Positioned(
@@ -29,35 +29,104 @@ class HomeView extends StatelessWidget {
                         direction: Axis.horizontal,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.notifications_active,
-                            color: Colors.white,
-                            size: 32,
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "MApps",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                              ),
+                            ),
                           ),
-                          Text("usernamexxxxx",style: TextStyle(
-                            color: Colors.white60,
-                            fontSize: 30
-                          ),),
-                          Icon(Icons.location_on,color: Colors.white,size: 32,)
+                          Flex(
+                            direction: Axis.horizontal,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(
+                                Icons.camera_alt_outlined,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.search,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
-                    Positioned(
-                      bottom: 5,
-                      left: 5,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        width:86,
-                        height:86,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.lime
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.all(10),
+              height: 62,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "All",
+                      style: TextStyle(color: Colors.white,fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "Unread",
+                      style: TextStyle(color: Colors.white,fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "Favorites",
+                      style: TextStyle(color: Colors.white,fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "Channel",
+                      style: TextStyle(color: Colors.white,fontSize: 18),
+                    ),
+                  ),
+                ],
+              ),
+              // other widget properties here
             ),
           ),
           SliverList(
@@ -65,10 +134,33 @@ class HomeView extends StatelessWidget {
               (context, index) => ListTile(
                 title: Text('Item #$index'),
               ),
-              childCount: 50,
+              childCount: 30,
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Chats',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.feed),
+            label: 'Feed',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups),
+            label: 'Channel',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.phone_enabled),
+            label: 'Calls',
+          ),
+        ],
+        // currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        // onTap: _onItemTapped,
       ),
     );
   }
