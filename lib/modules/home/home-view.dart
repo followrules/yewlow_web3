@@ -229,7 +229,7 @@ class HomeView extends StatelessWidget {
           // Aksi saat tombol ditekan
           print("Pesan tombol ditekan!");
         },
-        child: Icon(Icons.speaker_notes_outlined,color: Colors.white,size: 32,),  // Ikon pesan
+        child: Icon(Icons.add_comment_sharp,color: Colors.black54,size: 32,),  // Ikon pesan
         backgroundColor: Colors.teal[700],
       ),
     );
