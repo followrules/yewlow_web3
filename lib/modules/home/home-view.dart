@@ -32,7 +32,7 @@ class HomeView extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             child: Text(
-                              "MApps",
+                              "WasCap",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -88,10 +88,12 @@ class HomeView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "All",
-                      style: TextStyle(color: Colors.white,fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -99,10 +101,12 @@ class HomeView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "Unread",
-                      style: TextStyle(color: Colors.white,fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -110,10 +114,12 @@ class HomeView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "Favorites",
-                      style: TextStyle(color: Colors.white,fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -121,7 +127,7 @@ class HomeView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "Channel",
-                      style: TextStyle(color: Colors.white,fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ],
@@ -132,35 +138,99 @@ class HomeView extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => ListTile(
-                title: Text('Item #$index'),
-              ),
+                  title: Flex(
+                mainAxisAlignment: MainAxisAlignment.center,
+                direction: Axis.horizontal,
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage("assets/img/profil.png"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Flex(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        direction: Axis.vertical,
+                        children: [
+                          Text(
+                            "John Doe",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Sebelumnya, posisi Menparekraf adalah Sandiaga Uno. Kini kementerian ini dipecah menjadi Kementerian Pariwisata dan Kementerian Ekonomi Kreatif...",
+                            style: TextStyle(fontSize: 14),
+                            overflow: TextOverflow
+                                .ellipsis, // Mencegah overflow dengan elipsis
+                            maxLines: 1, // Batasi hanya satu baris
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )),
               childCount: 30,
             ),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
+              size: 24,
+              color: Colors.grey,
+            ),
             label: 'Chats',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.feed),
+            icon: Icon(
+              Icons.feed,
+              size: 24,
+              color: Colors.grey,
+            ),
             label: 'Feed',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.groups),
+            icon: Icon(
+              Icons.groups,
+              size: 24,
+              color: Colors.grey,
+            ),
             label: 'Channel',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.phone_enabled),
+            icon: Icon(
+              Icons.phone_enabled,
+              size: 24,
+              color: Colors.grey,
+            ),
             label: 'Calls',
           ),
         ],
         // currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
         // onTap: _onItemTapped,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Aksi saat tombol ditekan
+          print("Pesan tombol ditekan!");
+        },
+        child: Icon(Icons.speaker_notes_outlined,color: Colors.white,size: 32,),  // Ikon pesan
+        backgroundColor: Colors.teal[700],
       ),
     );
   }
