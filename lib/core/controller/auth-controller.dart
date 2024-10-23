@@ -16,6 +16,7 @@ class AuthController extends GetxController {
   RxBool isWalletConnected = false.obs;
   final get_storage = StorageUtils();
 
+
   @override
   void onInit() async {
     super.onInit();
@@ -74,10 +75,9 @@ class AuthController extends GetxController {
   void connectWallet() async {
     if (appKitModal != null) {
       if (!appKitModal!.isConnected) {
-        appKitModal!.openModalView().then((_){
+        appKitModal!.openModalView().then((_) {
           Get.offAndToNamed(Routes.HOME);
-           get_storage.setStroreByKey(
-            "address", appKitModal?.session?.address!);
+          get_storage.setStroreByKey("address", appKitModal?.session?.address!);
         });
       } else {
         await get_storage.setStroreByKey(
